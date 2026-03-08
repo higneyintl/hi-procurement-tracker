@@ -175,6 +175,18 @@
       border-color: var(--gold); font-weight: 600;
     }
 
+    /* ── SORTABLE HEADERS ── */
+    th.sortable {
+      cursor: pointer; user-select: none;
+      white-space: nowrap;
+    }
+    th.sortable:hover { color: var(--gold); }
+    th.sortable.asc, th.sortable.desc { color: var(--gold); }
+    .sort-icon { font-style: normal; font-size: 10px; margin-left: 3px; opacity: 0.5; }
+    th.sortable.asc  .sort-icon::after { content: '▲'; opacity: 1; }
+    th.sortable.desc .sort-icon::after { content: '▼'; opacity: 1; }
+    th.sortable:not(.asc):not(.desc) .sort-icon::after { content: '⇅'; }
+
     /* ── TABLE ── */
     .table-wrap {
       background: var(--surface);
@@ -310,12 +322,12 @@
     <table>
       <thead>
         <tr>
-          <th>#</th>
-          <th>Vendor</th>
-          <th>Item</th>
-          <th style="text-align:center">Qty</th>
-          <th>Status</th>
-          <th>ETA</th>
+          <th onclick="sortBy('id')"     class="sortable">#     <span class="sort-icon" id="si-id"></span></th>
+          <th onclick="sortBy('vendor')" class="sortable">Vendor <span class="sort-icon" id="si-vendor"></span></th>
+          <th onclick="sortBy('item')"   class="sortable">Item   <span class="sort-icon" id="si-item"></span></th>
+          <th onclick="sortBy('qty')"    class="sortable" style="text-align:center">Qty <span class="sort-icon" id="si-qty"></span></th>
+          <th onclick="sortBy('status')" class="sortable">Status <span class="sort-icon" id="si-status"></span></th>
+          <th onclick="sortBy('eta')"    class="sortable">ETA    <span class="sort-icon" id="si-eta"></span></th>
           <th>Notes</th>
         </tr>
       </thead>
@@ -350,7 +362,7 @@ const LEGEND_ITEMS = [
   { label: 'Delivered',            color: '#065f46' },
 ];
 
-let allItems = [], currentFilter = 'All';
+let allItems = [], currentFilter = 'All', sortKey = null, sortDir = 1;
 
 async function loadData() {
   const p = new URLSearchParams(location.search).get('project') || 'metro-lagoons';
@@ -409,8 +421,26 @@ function render(data) {
   renderTable();
 }
 
+function sortBy(key) {
+  if (sortKey === key) { sortDir *= -1; }
+  else { sortKey = key; sortDir = 1; }
+  // Update header classes
+  document.querySelectorAll('th.sortable').forEach(th => th.classList.remove('asc','desc'));
+  const map = { id:'id', vendor:'vendor', item:'item', qty:'qty', status:'status', eta:'eta' };
+  const th = document.querySelector(`th[onclick="sortBy('${key}')"]`);
+  if (th) th.classList.add(sortDir === 1 ? 'asc' : 'desc');
+  renderTable();
+}
+
 function renderTable() {
-  const items = currentFilter === 'All' ? allItems : allItems.filter(i => i.status === currentFilter);
+  let items = currentFilter === 'All' ? allItems : allItems.filter(i => i.status === currentFilter);
+  if (sortKey) {
+    items = [...items].sort((a, b) => {
+      let av = a[sortKey] ?? '', bv = b[sortKey] ?? '';
+      if (sortKey === 'qty') return (av - bv) * sortDir;
+      return String(av).localeCompare(String(bv), undefined, {numeric: true}) * sortDir;
+    });
+  }
   if (!items.length) {
     document.getElementById('tableBody').innerHTML =
       '<tr><td colspan="7"><div class="empty"><div class="icon">🔍</div><p>No items.</p></div></td></tr>';
