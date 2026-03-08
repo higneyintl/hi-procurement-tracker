@@ -311,8 +311,8 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>Item</th>
           <th>Vendor</th>
+          <th>Item</th>
           <th style="text-align:center">Qty</th>
           <th>Status</th>
           <th>ETA</th>
@@ -419,10 +419,8 @@ function renderTable() {
     const areas = (item.areas||[]).map(a => `<span class="area-tag">${a}</span>`).join('');
     return `<tr>
       <td class="cell-num">${item.id}</td>
-      <td>
-        <div class="cell-item-name">${item.item}</div>
-      </td>
       <td class="cell-vendor">${item.vendor||'—'}</td>
+      <td><div class="cell-item-name">${item.item}</div></td>
       <td class="cell-qty">${item.qty != null ? item.qty : '—'}</td>
       <td><span class="badge ${cls}">${item.status}</span></td>
       <td class="cell-eta">${item.eta||'—'}</td>
