@@ -397,8 +397,10 @@ function render(data) {
     `<div class="legend-item"><div class="legend-dot" style="background:${l.color}"></div>${l.label}</div>`
   ).join('');
 
-  // Collect unique statuses for filter
-  const statuses = [...new Set(allItems.map(i => i.status))].sort();
+  // Collect statuses in legend order
+  const STATUS_ORDER = ['Sourcing','Quoting','Selection Approved','Finishes Pending','Shop Drawings Stage','In Production','Design Pending Approval','Shipped','Delivered','On Hold'];
+  const present = new Set(allItems.map(i => i.status));
+  const statuses = STATUS_ORDER.filter(s => present.has(s));
   const bar = document.getElementById('filterBar');
   bar.innerHTML = `<span class="filter-label">Filter:</span>
     <button class="filter-btn active" onclick="applyFilter('All',this)">All</button>
