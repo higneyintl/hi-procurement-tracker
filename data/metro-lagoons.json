@@ -1,0 +1,19 @@
+{
+  "project": "Metro Lagoons",
+  "subtitle": "Project Seaire — Parrish, FL",
+  "lastUpdated": "2026-03-08",
+  "items": [
+    {
+      "id": 1,
+      "category": "Shade Structures",
+      "item": "Tiki Huts",
+      "vendor": "TBD",
+      "qty": 8,
+      "unitPrice": null,
+      "status": "Sourcing",
+      "eta": "TBD",
+      "poNumber": "",
+      "notes": "Sourcing in progress"
+    }
+  ]
+}
