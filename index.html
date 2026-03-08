@@ -6,29 +6,28 @@
   <title>HI Procurement Tracker</title>
   <style>
     :root {
-      --bg: #0a0a0a;
-      --surface: #111111;
-      --surface2: #1a1a1a;
-      --border: #2a2a2a;
-      --text: #f0f0f0;
-      --muted: #888;
-      --gold: #c9a84c;
-      --gold-light: #e8c96a;
+      --bg: #f4f5f7;
+      --surface: #ffffff;
+      --surface2: #f8f9fa;
+      --border: #e2e5e9;
+      --text: #1a1d23;
+      --text2: #4a5568;
+      --muted: #8a95a3;
+      --gold: #b8862a;
+      --gold-bg: #fdf6e8;
+      --gold-border: #e8c97a;
 
-      --status-sourcing-bg: #1a1a2e;
-      --status-sourcing-fg: #7b8cde;
-      --status-quoting-bg: #1a1a0a;
-      --status-quoting-fg: #c9a84c;
-      --status-po-bg: #0a1a2e;
-      --status-po-fg: #4a9ede;
-      --status-production-bg: #1a0a1a;
-      --status-production-fg: #c97de8;
-      --status-shipped-bg: #0a1a0a;
-      --status-shipped-fg: #4ade80;
-      --status-delivered-bg: #0a1a0a;
-      --status-delivered-fg: #22c55e;
-      --status-hold-bg: #1a0a0a;
-      --status-hold-fg: #ef4444;
+      --s-sourcing:      #e8f0fe; --s-sourcing-fg:    #3b5bdb; --s-sourcing-bd:   #a5b4fc;
+      --s-quoting:       #fff8e1; --s-quoting-fg:     #b7791f; --s-quoting-bd:    #f6c84a;
+      --s-approved:      #e6f9f0; --s-approved-fg:    #1a7f4b; --s-approved-bd:   #6ee7b7;
+      --s-finishes:      #fff3e0; --s-finishes-fg:    #c05621; --s-finishes-bd:   #fca97a;
+      --s-drawings:      #f3e8ff; --s-drawings-fg:    #6b21a8; --s-drawings-bd:   #d8b4fe;
+      --s-production:    #e0f2fe; --s-production-fg:  #0369a1; --s-production-bd: #7dd3fc;
+      --s-design:        #fce7f3; --s-design-fg:      #9d174d; --s-design-bd:     #f9a8d4;
+      --s-multiple:      #f1f5f9; --s-multiple-fg:    #475569; --s-multiple-bd:   #cbd5e1;
+      --s-shipped:       #dcfce7; --s-shipped-fg:     #15803d; --s-shipped-bd:    #86efac;
+      --s-delivered:     #d1fae5; --s-delivered-fg:   #065f46; --s-delivered-bd:  #6ee7b7;
+      --s-hold:          #fee2e2; --s-hold-fg:        #b91c1c; --s-hold-bd:       #fca5a5;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,319 +35,240 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
       min-height: 100vh;
+      font-size: 14px;
     }
 
-    /* HEADER */
+    /* ── HEADER ── */
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 24px 32px;
+      padding: 0 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
+      height: 64px;
       gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
     }
 
-    .logo-area {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+    .logo-area { display: flex; align-items: center; gap: 12px; }
 
     .logo-mark {
-      width: 44px;
-      height: 44px;
+      width: 38px; height: 38px;
       background: var(--gold);
       border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 18px;
-      color: #000;
-      letter-spacing: -0.5px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 15px; color: #fff; letter-spacing: -0.5px;
     }
 
-    .logo-text h1 {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.3px;
+    .logo-text h1 { font-size: 16px; font-weight: 700; color: var(--text); }
+    .logo-text p  { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+    .header-right { display: flex; align-items: center; gap: 12px; }
+
+    .project-badge {
+      background: var(--gold-bg);
+      border: 1px solid var(--gold-border);
+      color: var(--gold);
+      font-size: 12px; font-weight: 700;
+      padding: 4px 10px; border-radius: 6px;
+      letter-spacing: 0.3px;
     }
 
-    .logo-text p {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
+    .last-updated { font-size: 12px; color: var(--muted); }
 
-    .header-meta {
-      text-align: right;
-    }
-
-    .header-meta .project-badge {
-      display: inline-block;
-      background: var(--gold);
-      color: #000;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 4px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-
-    .header-meta .last-updated {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    /* SUMMARY CARDS */
+    /* ── SUMMARY STRIP ── */
     .summary {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 1px;
-      background: var(--border);
+      display: flex;
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
+      overflow-x: auto;
     }
 
     .summary-card {
-      background: var(--surface);
-      padding: 20px 24px;
+      flex: 1; min-width: 120px;
+      padding: 16px 24px;
       text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .summary-card:last-child { border-right: none; }
+
+    .summary-card .val {
+      font-size: 26px; font-weight: 700;
+      color: var(--gold); line-height: 1;
+    }
+    .summary-card .lbl {
+      font-size: 11px; color: var(--muted);
+      margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px;
     }
 
-    .summary-card .value {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--gold);
-      line-height: 1;
+    /* ── MAIN ── */
+    main { padding: 24px 32px; max-width: 1440px; margin: 0 auto; }
+
+    /* ── PROGRESS ── */
+    .progress-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 18px;
     }
 
-    .summary-card .label {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .progress-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px;
     }
 
-    /* MAIN */
-    main {
-      padding: 32px;
-      max-width: 1400px;
-      margin: 0 auto;
+    .progress-title { font-size: 13px; font-weight: 600; color: var(--text2); }
+    .progress-pct   { font-size: 14px; font-weight: 700; color: var(--gold); }
+
+    .progress-bg {
+      background: var(--bg);
+      border-radius: 6px; height: 8px; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), #e8a93a);
+      border-radius: 6px;
+      transition: width .6s ease;
     }
 
-    /* FILTER BAR */
-    .filter-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; color: var(--muted);
+    }
+    .legend-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+    /* ── TOOLBAR ── */
+    .toolbar {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 14px; flex-wrap: wrap;
     }
 
     .filter-label {
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-right: 4px;
+      font-size: 11px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-right: 2px;
     }
 
     .filter-btn {
       background: var(--surface);
       border: 1px solid var(--border);
-      color: var(--muted);
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.15s;
+      color: var(--text2);
+      padding: 5px 13px;
+      border-radius: 6px; font-size: 12px; font-weight: 500;
+      cursor: pointer; transition: all .15s;
+      white-space: nowrap;
+    }
+    .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .filter-btn.active {
+      background: var(--gold); color: #fff;
+      border-color: var(--gold); font-weight: 600;
     }
 
-    .filter-btn:hover, .filter-btn.active {
-      background: var(--gold);
-      color: #000;
-      border-color: var(--gold);
-      font-weight: 600;
-    }
-
-    /* TABLE */
+    /* ── TABLE ── */
     .table-wrap {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 10px;
       overflow: hidden;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+    table { width: 100%; border-collapse: collapse; }
 
     thead tr {
       background: var(--surface2);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 2px solid var(--border);
     }
 
     th {
-      padding: 12px 16px;
+      padding: 10px 14px;
       text-align: left;
-      font-size: 11px;
-      font-weight: 600;
+      font-size: 11px; font-weight: 600;
       color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
+      text-transform: uppercase; letter-spacing: 0.5px;
       white-space: nowrap;
     }
 
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background 0.1s;
-    }
-
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
     tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: var(--surface2); }
+    tbody tr:hover { background: #fafbfc; }
 
-    td {
-      padding: 14px 16px;
-      font-size: 14px;
-      vertical-align: middle;
+    td { padding: 12px 14px; vertical-align: middle; }
+
+    .cell-num { color: var(--muted); font-size: 12px; font-weight: 500; }
+    .cell-item-name { font-weight: 600; color: var(--text); line-height: 1.3; }
+    .cell-areas {
+      display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;
     }
+    .area-tag {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text2);
+      font-size: 10px; padding: 1px 6px; border-radius: 4px;
+    }
+    .cell-vendor { color: var(--text2); font-size: 13px; }
+    .cell-qty { font-weight: 700; color: var(--text); text-align: center; }
+    .cell-eta { color: var(--text2); font-size: 13px; white-space: nowrap; }
+    .cell-notes { color: var(--muted); font-size: 12px; max-width: 200px; line-height: 1.4; }
 
-    .cell-item { font-weight: 600; color: var(--text); }
-    .cell-category { font-size: 11px; color: var(--muted); margin-top: 2px; }
-    .cell-vendor { color: var(--muted); }
-    .cell-qty { font-weight: 600; text-align: center; }
-    .cell-eta { color: var(--muted); font-size: 13px; }
-    .cell-po { font-family: monospace; font-size: 12px; color: var(--muted); }
-    .cell-notes { font-size: 13px; color: var(--muted); max-width: 220px; }
-
-    /* STATUS BADGES */
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
+    /* ── STATUS BADGES ── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 9px; border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+      border: 1px solid transparent;
       white-space: nowrap;
     }
-
-    .status-badge::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: currentColor;
+    .badge::before {
+      content: ''; width: 5px; height: 5px;
+      border-radius: 50%; background: currentColor; flex-shrink: 0;
     }
 
-    .status-Sourcing     { background: var(--status-sourcing-bg);    color: var(--status-sourcing-fg); }
-    .status-Quoting      { background: var(--status-quoting-bg);     color: var(--status-quoting-fg); }
-    .status-PO-Issued    { background: var(--status-po-bg);          color: var(--status-po-fg); }
-    .status-In-Production{ background: var(--status-production-bg);  color: var(--status-production-fg); }
-    .status-Shipped      { background: var(--status-shipped-bg);     color: var(--status-shipped-fg); }
-    .status-Delivered    { background: var(--status-delivered-bg);   color: var(--status-delivered-fg); }
-    .status-On-Hold      { background: var(--status-hold-bg);        color: var(--status-hold-fg); }
+    .badge-Sourcing            { background: var(--s-sourcing);    color: var(--s-sourcing-fg);    border-color: var(--s-sourcing-bd); }
+    .badge-Quoting             { background: var(--s-quoting);     color: var(--s-quoting-fg);     border-color: var(--s-quoting-bd); }
+    .badge-Selection-Approved  { background: var(--s-approved);    color: var(--s-approved-fg);    border-color: var(--s-approved-bd); }
+    .badge-Finishes-Pending    { background: var(--s-finishes);    color: var(--s-finishes-fg);    border-color: var(--s-finishes-bd); }
+    .badge-Shop-Drawings-Stage { background: var(--s-drawings);    color: var(--s-drawings-fg);    border-color: var(--s-drawings-bd); }
+    .badge-In-Production       { background: var(--s-production);  color: var(--s-production-fg);  border-color: var(--s-production-bd); }
+    .badge-Design-Pending-Approval { background: var(--s-design); color: var(--s-design-fg);      border-color: var(--s-design-bd); }
+    .badge-Multiple            { background: var(--s-multiple);    color: var(--s-multiple-fg);    border-color: var(--s-multiple-bd); }
+    .badge-Shipped             { background: var(--s-shipped);     color: var(--s-shipped-fg);     border-color: var(--s-shipped-bd); }
+    .badge-Delivered           { background: var(--s-delivered);   color: var(--s-delivered-fg);   border-color: var(--s-delivered-bd); }
+    .badge-On-Hold             { background: var(--s-hold);        color: var(--s-hold-fg);        border-color: var(--s-hold-bd); }
 
-    /* PROGRESS BAR */
-    .progress-section {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px 24px;
-      margin-bottom: 20px;
-    }
-
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .progress-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .progress-pct {
-      font-size: 13px;
-      color: var(--gold);
-      font-weight: 700;
-    }
-
-    .progress-bar-bg {
-      background: var(--surface2);
-      border-radius: 4px;
-      height: 8px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--gold), var(--gold-light));
-      border-radius: 4px;
-      transition: width 0.6s ease;
-    }
-
-    /* LEGEND */
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
+    /* ── EMPTY STATE ── */
+    .empty {
+      text-align: center; padding: 48px 24px;
       color: var(--muted);
     }
+    .empty .icon { font-size: 28px; margin-bottom: 10px; }
 
-    .legend-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
-
-    /* EMPTY STATE */
-    .empty-state {
-      text-align: center;
-      padding: 48px 24px;
-      color: var(--muted);
-    }
-
-    .empty-state .icon { font-size: 32px; margin-bottom: 12px; }
-    .empty-state p { font-size: 14px; }
-
-    /* FOOTER */
+    /* ── FOOTER ── */
     footer {
-      text-align: center;
-      padding: 24px;
-      font-size: 12px;
-      color: var(--muted);
+      text-align: center; padding: 24px;
+      font-size: 12px; color: var(--muted);
       border-top: 1px solid var(--border);
-      margin-top: 40px;
+      margin-top: 32px;
     }
 
-    /* RESPONSIVE */
+    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      header { padding: 16px 20px; }
-      main { padding: 20px 16px; }
-      th, td { padding: 10px 12px; }
+      header { padding: 0 16px; }
+      main { padding: 16px; }
+      th, td { padding: 10px 10px; }
       .cell-notes { display: none; }
-      .cell-po { display: none; }
+      .cell-areas { display: none; }
+      .summary-card { min-width: 90px; padding: 12px; }
     }
   </style>
 </head>
@@ -362,50 +282,32 @@
       <p>FF&amp;E Procurement Tracker</p>
     </div>
   </div>
-  <div class="header-meta">
-    <div class="project-badge" id="projectBadge">Loading...</div>
+  <div class="header-right">
+    <div class="project-badge" id="projectBadge">—</div>
     <div class="last-updated" id="lastUpdated"></div>
   </div>
 </header>
 
-<div class="summary" id="summaryCards"></div>
+<div class="summary" id="summaryStrip"></div>
 
 <main>
-  <!-- PROGRESS -->
-  <div class="progress-section">
+  <div class="progress-card">
     <div class="progress-header">
       <span class="progress-title">Overall Delivery Progress</span>
-      <span class="progress-pct" id="progressPct">0%</span>
+      <span class="progress-pct" id="progressPct">—</span>
     </div>
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    <div class="progress-bg">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
     </div>
-    <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#7b8cde"></div>Sourcing</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#c9a84c"></div>Quoting</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#4a9ede"></div>PO Issued</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#c97de8"></div>In Production</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#4ade80"></div>Shipped</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>Delivered</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>On Hold</div>
-    </div>
+    <div class="legend" id="legend"></div>
   </div>
 
-  <!-- FILTER -->
-  <div class="filter-bar">
+  <div class="toolbar" id="filterBar">
     <span class="filter-label">Filter:</span>
-    <button class="filter-btn active" onclick="filterTable('All')">All</button>
-    <button class="filter-btn" onclick="filterTable('Sourcing')">Sourcing</button>
-    <button class="filter-btn" onclick="filterTable('Quoting')">Quoting</button>
-    <button class="filter-btn" onclick="filterTable('PO Issued')">PO Issued</button>
-    <button class="filter-btn" onclick="filterTable('In Production')">In Production</button>
-    <button class="filter-btn" onclick="filterTable('Shipped')">Shipped</button>
-    <button class="filter-btn" onclick="filterTable('Delivered')">Delivered</button>
   </div>
 
-  <!-- TABLE -->
   <div class="table-wrap">
-    <table id="itemTable">
+    <table>
       <thead>
         <tr>
           <th>#</th>
@@ -414,132 +316,136 @@
           <th style="text-align:center">Qty</th>
           <th>Status</th>
           <th>ETA</th>
-          <th>PO #</th>
           <th>Notes</th>
         </tr>
       </thead>
       <tbody id="tableBody">
-        <tr><td colspan="8"><div class="empty-state"><div class="icon">📦</div><p>Loading items...</p></div></td></tr>
+        <tr><td colspan="7"><div class="empty"><div class="icon">⏳</div><p>Loading...</p></div></td></tr>
       </tbody>
     </table>
   </div>
 </main>
 
 <footer>
-  Higney International &mdash; Confidential Client Report &mdash; <span id="footerProject"></span>
+  Higney International &mdash; Confidential &mdash; <span id="footerProject"></span>
 </footer>
 
 <script>
-  const STATUS_ORDER = ['Sourcing','Quoting','PO Issued','In Production','Shipped','Delivered','On Hold'];
-  const DELIVERED_WEIGHT = { 'Sourcing':0,'Quoting':0.2,'PO Issued':0.4,'In Production':0.6,'Shipped':0.8,'Delivered':1,'On Hold':0 };
+const WEIGHT = {
+  'Sourcing': 0, 'Quoting': 0.1, 'Design Pending Approval': 0.15,
+  'Finishes Pending': 0.25, 'Selection Approved': 0.35,
+  'Shop Drawings Stage': 0.5, 'In Production': 0.65,
+  'Multiple': 0.3, 'Shipped': 0.85, 'Delivered': 1, 'On Hold': 0
+};
 
-  let allItems = [];
-  let currentFilter = 'All';
+const LEGEND_ITEMS = [
+  { label: 'Sourcing',              color: '#3b5bdb' },
+  { label: 'Quoting',              color: '#b7791f' },
+  { label: 'Selection Approved',   color: '#1a7f4b' },
+  { label: 'Finishes Pending',     color: '#c05621' },
+  { label: 'Shop Drawings Stage',  color: '#6b21a8' },
+  { label: 'In Production',        color: '#0369a1' },
+  { label: 'Design Pending',       color: '#9d174d' },
+  { label: 'Shipped',              color: '#15803d' },
+  { label: 'Delivered',            color: '#065f46' },
+];
 
-  async function loadData() {
-    // Determine project from URL param or default
-    const params = new URLSearchParams(window.location.search);
-    const project = params.get('project') || 'metro-lagoons';
+let allItems = [], currentFilter = 'All';
 
-    try {
-      const res = await fetch(`data/${project}.json?t=${Date.now()}`);
-      const data = await res.json();
-      renderPage(data);
-    } catch(e) {
-      document.getElementById('tableBody').innerHTML =
-        '<tr><td colspan="8"><div class="empty-state"><div class="icon">⚠️</div><p>Could not load project data.</p></div></td></tr>';
-    }
+async function loadData() {
+  const p = new URLSearchParams(location.search).get('project') || 'metro-lagoons';
+  try {
+    const r = await fetch(`data/${p}.json?t=${Date.now()}`);
+    render(await r.json());
+  } catch {
+    document.getElementById('tableBody').innerHTML =
+      '<tr><td colspan="7"><div class="empty"><div class="icon">⚠️</div><p>Could not load data.</p></div></td></tr>';
   }
+}
 
-  function renderPage(data) {
-    // Header
-    document.title = `${data.project} — HI Tracker`;
-    document.getElementById('projectBadge').textContent = data.project;
-    document.getElementById('lastUpdated').textContent = `Updated: ${formatDate(data.lastUpdated)}`;
-    document.getElementById('footerProject').textContent = data.project;
+function render(data) {
+  document.title = `${data.project} — HI Tracker`;
+  document.getElementById('projectBadge').textContent = data.project;
+  document.getElementById('footerProject').textContent = `${data.project} · ${data.subtitle}`;
+  document.getElementById('lastUpdated').textContent = `Updated ${fmtDate(data.lastUpdated)}`;
 
-    allItems = data.items || [];
+  allItems = data.items || [];
 
-    // Summary cards
-    renderSummary(allItems);
+  // Summary
+  const total = allItems.length;
+  const totalQty = allItems.reduce((s,i) => s + (i.qty||0), 0);
+  const delivered = allItems.filter(i => i.status === 'Delivered').length;
+  const inProd = allItems.filter(i => ['In Production','Shop Drawings Stage'].includes(i.status)).length;
+  const approved = allItems.filter(i => i.status === 'Selection Approved').length;
+  const sourcing = allItems.filter(i => ['Sourcing','Quoting'].includes(i.status)).length;
 
-    // Progress
-    renderProgress(allItems);
+  document.getElementById('summaryStrip').innerHTML = [
+    { v: total,    l: 'Line Items' },
+    { v: totalQty, l: 'Total Units' },
+    { v: sourcing, l: 'Sourcing / Quoting' },
+    { v: approved, l: 'Selection Approved' },
+    { v: inProd,   l: 'In Progress' },
+    { v: delivered,l: 'Delivered' },
+  ].map(c => `<div class="summary-card"><div class="val">${c.v}</div><div class="lbl">${c.l}</div></div>`).join('');
 
-    // Table
-    renderTable(allItems);
+  // Progress
+  const score = allItems.reduce((s,i) => s + (WEIGHT[i.status] ?? 0.2), 0);
+  const pct = allItems.length ? Math.round((score / allItems.length) * 100) : 0;
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('legend').innerHTML = LEGEND_ITEMS.map(l =>
+    `<div class="legend-item"><div class="legend-dot" style="background:${l.color}"></div>${l.label}</div>`
+  ).join('');
+
+  // Collect unique statuses for filter
+  const statuses = [...new Set(allItems.map(i => i.status))].sort();
+  const bar = document.getElementById('filterBar');
+  bar.innerHTML = `<span class="filter-label">Filter:</span>
+    <button class="filter-btn active" onclick="applyFilter('All',this)">All</button>
+    ${statuses.map(s => `<button class="filter-btn" onclick="applyFilter('${s}',this)">${s}</button>`).join('')}`;
+
+  renderTable();
+}
+
+function renderTable() {
+  const items = currentFilter === 'All' ? allItems : allItems.filter(i => i.status === currentFilter);
+  if (!items.length) {
+    document.getElementById('tableBody').innerHTML =
+      '<tr><td colspan="7"><div class="empty"><div class="icon">🔍</div><p>No items.</p></div></td></tr>';
+    return;
   }
+  document.getElementById('tableBody').innerHTML = items.map(item => {
+    const cls = 'badge-' + (item.status||'').replace(/\s+/g,'-');
+    const areas = (item.areas||[]).map(a => `<span class="area-tag">${a}</span>`).join('');
+    return `<tr>
+      <td class="cell-num">${item.id}</td>
+      <td>
+        <div class="cell-item-name">${item.item}</div>
+        <div class="cell-areas">${areas}</div>
+      </td>
+      <td class="cell-vendor">${item.vendor||'—'}</td>
+      <td class="cell-qty">${item.qty != null ? item.qty : '—'}</td>
+      <td><span class="badge ${cls}">${item.status}</span></td>
+      <td class="cell-eta">${item.eta||'—'}</td>
+      <td class="cell-notes">${item.notes||'—'}</td>
+    </tr>`;
+  }).join('');
+}
 
-  function renderSummary(items) {
-    const total = items.length;
-    const totalQty = items.reduce((s,i) => s + (i.qty||0), 0);
-    const delivered = items.filter(i => i.status === 'Delivered').length;
-    const inFlight = items.filter(i => ['Shipped','In Production','PO Issued'].includes(i.status)).length;
-    const pending = items.filter(i => ['Sourcing','Quoting'].includes(i.status)).length;
+function applyFilter(status, btn) {
+  currentFilter = status;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
 
-    const cards = [
-      { value: total, label: 'Line Items' },
-      { value: totalQty, label: 'Total Units' },
-      { value: pending, label: 'Pending' },
-      { value: inFlight, label: 'In Progress' },
-      { value: delivered, label: 'Delivered' },
-    ];
+function fmtDate(s) {
+  if (!s) return '';
+  const d = new Date(s + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
 
-    document.getElementById('summaryCards').innerHTML = cards.map(c =>
-      `<div class="summary-card"><div class="value">${c.value}</div><div class="label">${c.label}</div></div>`
-    ).join('');
-  }
-
-  function renderProgress(items) {
-    if (!items.length) return;
-    const score = items.reduce((s,i) => s + (DELIVERED_WEIGHT[i.status]||0), 0);
-    const pct = Math.round((score / items.length) * 100);
-    document.getElementById('progressPct').textContent = pct + '%';
-    document.getElementById('progressFill').style.width = pct + '%';
-  }
-
-  function renderTable(items) {
-    const filtered = currentFilter === 'All' ? items : items.filter(i => i.status === currentFilter);
-
-    if (!filtered.length) {
-      document.getElementById('tableBody').innerHTML =
-        '<tr><td colspan="8"><div class="empty-state"><div class="icon">🔍</div><p>No items match this filter.</p></div></td></tr>';
-      return;
-    }
-
-    document.getElementById('tableBody').innerHTML = filtered.map(item => {
-      const statusClass = 'status-' + (item.status||'').replace(/\s+/g,'-');
-      return `<tr>
-        <td style="color:var(--muted);font-size:12px">${item.id}</td>
-        <td>
-          <div class="cell-item">${item.item}</div>
-          ${item.category ? `<div class="cell-category">${item.category}</div>` : ''}
-        </td>
-        <td class="cell-vendor">${item.vendor || '—'}</td>
-        <td class="cell-qty">${item.qty || '—'}</td>
-        <td><span class="status-badge ${statusClass}">${item.status}</span></td>
-        <td class="cell-eta">${item.eta || '—'}</td>
-        <td class="cell-po">${item.poNumber || '—'}</td>
-        <td class="cell-notes">${item.notes || '—'}</td>
-      </tr>`;
-    }).join('');
-  }
-
-  function filterTable(status) {
-    currentFilter = status;
-    document.querySelectorAll('.filter-btn').forEach(b => {
-      b.classList.toggle('active', b.textContent === status || (status === 'All' && b.textContent === 'All'));
-    });
-    renderTable(allItems);
-  }
-
-  function formatDate(str) {
-    if (!str) return '';
-    const d = new Date(str + 'T00:00:00');
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  }
-
-  loadData();
+loadData();
 </script>
 </body>
 </html>
