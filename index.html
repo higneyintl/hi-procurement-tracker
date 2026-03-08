@@ -365,7 +365,7 @@ async function loadData() {
 
 function render(data) {
   document.title = `${data.project} — HI Tracker`;
-  document.getElementById('projectBadge').textContent = data.project;
+  document.getElementById('projectBadge').textContent = data.project + ' · Seaire';
   document.getElementById('footerProject').textContent = `${data.project} · ${data.subtitle}`;
   document.getElementById('lastUpdated').textContent = `Updated ${fmtDate(data.lastUpdated)}`;
 
