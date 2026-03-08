@@ -327,6 +327,7 @@
           <th onclick="sortBy('item')"   class="sortable">Item   <span class="sort-icon" id="si-item"></span></th>
           <th onclick="sortBy('qty')"    class="sortable" style="text-align:center">Qty <span class="sort-icon" id="si-qty"></span></th>
           <th onclick="sortBy('status')" class="sortable">Status <span class="sort-icon" id="si-status"></span></th>
+          <th onclick="sortBy('datePaid')" class="sortable">Date Vendor Paid <span class="sort-icon" id="si-datePaid"></span></th>
           <th onclick="sortBy('eta')"    class="sortable">ETA    <span class="sort-icon" id="si-eta"></span></th>
           <th>Notes</th>
         </tr>
@@ -455,6 +456,7 @@ function renderTable() {
       <td><div class="cell-item-name">${item.item}</div></td>
       <td class="cell-qty">${item.qty != null ? item.qty : '—'}</td>
       <td><span class="badge ${cls}">${item.status}</span></td>
+      <td class="cell-eta">${item.datePaid||'—'}</td>
       <td class="cell-eta">${item.eta||'—'}</td>
       <td class="cell-notes">${item.notes||'—'}</td>
     </tr>`;
