@@ -344,6 +344,8 @@
 </footer>
 
 <script>
+const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS5iTpo-7KLLFZa4sUt4ADiiy9Qy7Lfoo-Xnx9RGOipsKPtv8lvKlG60Lb_X0dZjfyrF_xo7BJE34MM/pub?gid=747201363&single=true&output=csv';
+
 const WEIGHT = {
   'Sourcing': 0, 'Quoting': 0.1, 'Design Pending Approval': 0.15,
   'Finishes Pending': 0.25, 'Selection Approved': 0.35,
@@ -365,12 +367,47 @@ const LEGEND_ITEMS = [
 
 let allItems = [], currentFilter = 'All', sortKey = null, sortDir = 1;
 
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',');
+  const items = [];
+  for (let i = 1; i < lines.length; i++) {
+    // Handle quoted fields
+    const cols = [];
+    let cur = '', inQ = false;
+    for (const ch of lines[i]) {
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      else { cur += ch; }
+    }
+    cols.push(cur.trim());
+    if (!cols[0]) continue;
+    items.push({
+      id:       parseInt(cols[0]) || 0,
+      vendor:   cols[1] || '',
+      item:     cols[2] || '',
+      qty:      parseInt(cols[3]) || 0,
+      status:   cols[4] || '',
+      datePaid: cols[5] || '',
+      eta:      cols[6] || '',
+      notes:    cols[7] || ''
+    });
+  }
+  return items;
+}
+
 async function loadData() {
-  const p = new URLSearchParams(location.search).get('project') || 'metro-lagoons';
   try {
-    const r = await fetch(`data/${p}.json?t=${Date.now()}`);
-    render(await r.json());
-  } catch {
+    const r = await fetch(SHEET_CSV + '&t=' + Date.now());
+    const text = await r.text();
+    const items = parseCSV(text);
+    render({
+      project: 'Metro Lagoons',
+      subtitle: 'Project Seaire — Parrish, FL',
+      lastUpdated: new Date().toISOString().slice(0,10),
+      items
+    });
+  } catch(e) {
     document.getElementById('tableBody').innerHTML =
       '<tr><td colspan="7"><div class="empty"><div class="icon">⚠️</div><p>Could not load data.</p></div></td></tr>';
   }
