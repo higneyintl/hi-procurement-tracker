@@ -29,6 +29,7 @@
       --s-shipped:       #dcfce7; --s-shipped-fg:     #15803d; --s-shipped-bd:    #86efac;
       --s-delivered:     #d1fae5; --s-delivered-fg:   #065f46; --s-delivered-bd:  #6ee7b7;
       --s-hold:          #fee2e2; --s-hold-fg:        #b91c1c; --s-hold-bd:       #fca5a5;
+      --s-submitted:     #ccfbf1; --s-submitted-fg:   #0f766e; --s-submitted-bd:  #5eead4;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -259,6 +260,7 @@
     .badge-Delivered           { background: var(--s-delivered);   color: var(--s-delivered-fg);   border-color: var(--s-delivered-bd); }
     .badge-On-Hold             { background: var(--s-hold);        color: var(--s-hold-fg);        border-color: var(--s-hold-bd); }
     .badge-Sandbar-Upstairs-Design-Pending-Approval { background: var(--s-sandbar); color: var(--s-sandbar-fg); border-color: var(--s-sandbar-bd); }
+    .badge-Submitted-for-Client-Approval { background: var(--s-submitted); color: var(--s-submitted-fg); border-color: var(--s-submitted-bd); }
 
     /* ── EMPTY STATE ── */
     .empty {
@@ -351,7 +353,7 @@ const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS5iTpo-7KLLF
 const WEIGHT = {
   'Sourcing': 0, 'Quoting': 0.1, 'Design Pending Approval': 0.15,
   'Sandbar Upstairs Design Pending Approval': 0.15,
-  'Finishes Pending': 0.25, 'Selection Approved': 0.35,
+  'Submitted for Client Approval': 0.28, 'Finishes Pending': 0.25, 'Selection Approved': 0.35,
   'Shop Drawings Stage': 0.5, 'In Production': 0.65,
   'Multiple': 0.3, 'Shipped': 0.85, 'Delivered': 1, 'On Hold': 0
 };
@@ -432,14 +434,16 @@ function render(data) {
   const inProd = allItems.filter(i => ['In Production','Shop Drawings Stage'].includes(i.status)).length;
   const approved = allItems.filter(i => i.status === 'Selection Approved').length;
   const sourcing = allItems.filter(i => ['Sourcing','Quoting'].includes(i.status)).length;
+  const submitted = allItems.filter(i => i.status === 'Submitted for Client Approval').length;
 
   document.getElementById('summaryStrip').innerHTML = [
     { v: total,    l: 'Line Items' },
     { v: totalQty, l: 'Total Units' },
-    { v: sourcing, l: 'Sourcing / Quoting' },
-    { v: approved, l: 'Selection Approved' },
-    { v: inProd,   l: 'In Progress' },
-    { v: delivered,l: 'Delivered' },
+    { v: sourcing,  l: 'Sourcing / Quoting' },
+    { v: submitted, l: 'Submitted for Approval' },
+    { v: approved,  l: 'Selection Approved' },
+    { v: inProd,    l: 'In Progress' },
+    { v: delivered, l: 'Delivered' },
   ].map(c => `<div class="summary-card"><div class="val">${c.v}</div><div class="lbl">${c.l}</div></div>`).join('');
 
   // Progress
@@ -452,7 +456,7 @@ function render(data) {
   ).join('');
 
   // Collect statuses in legend order
-  const STATUS_ORDER = ['Sourcing','Quoting','Selection Approved','Finishes Pending','Shop Drawings Stage','In Production','Design Pending Approval','Sandbar Upstairs Design Pending Approval','Shipped','Delivered','On Hold'];
+  const STATUS_ORDER = ['Sourcing','Quoting','Submitted for Client Approval','Selection Approved','Finishes Pending','Shop Drawings Stage','In Production','Design Pending Approval','Sandbar Upstairs Design Pending Approval','Shipped','Delivered','On Hold'];
   const present = new Set(allItems.map(i => i.status));
   const statuses = STATUS_ORDER.filter(s => present.has(s));
   const bar = document.getElementById('filterBar');
